@@ -28,7 +28,7 @@
         <div class="item">Content</div>
       </div>
       {#each $notes as note,i}
-        <div class="row" on:click="{()=>selectedNote=i}">
+        <div class="row" on:click="{()=>{selectedNote=i;showAllNotes=false}}">
           <div class="item">{note.name}</div>
           <div class="item">{note.date}</div>
           <div class="item">{note.content.slice(0,10)}</div>
