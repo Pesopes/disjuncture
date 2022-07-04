@@ -1,6 +1,6 @@
 <script>
   import Popup from "./../Popup.svelte"
-  import { settings } from "../../stores/localStorage"
+  import { settings, settingsDefault } from "../../stores/localStorage"
   import {get} from 'svelte/store'
   import { onMount, onDestroy} from "svelte"
 
@@ -30,6 +30,14 @@
     <input type="checkbox" bind:checked="{settingsCache.runMouseOver}"/><br/>
   </label>
   <label>
+    Scanlines:
+    <input type="checkbox" bind:checked="{settingsCache.scanLines}"/><br/>
+  </label>
+  <label>
+    Filter:
+    <input type="checkbox" bind:checked="{settingsCache.crtFilter}"/><br/>
+  </label>
+  <label>
     Rules:
     <input type="number" bind:value="{settingsCache.gameSettings.rulesCount}"  min="1"/><br/>
   </label>
@@ -39,6 +47,6 @@
   </label>
   <!-- <button on:click={()=>generateGoodGame(100)}>Generate good game</button> -->
   <button on:click={()=>settings.set(settingsCache)}>Apply settings</button>
-  <button on:click={()=>settingsCache=JSON.parse(JSON.stringify(settingsBackup))}>Reset</button>
+  <button on:click={()=>settingsCache=JSON.parse(JSON.stringify(settingsDefault))}>Reset</button>
 
 </Popup>

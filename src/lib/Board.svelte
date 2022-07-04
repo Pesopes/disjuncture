@@ -253,12 +253,16 @@
       }
     }
   }
+
+  function handleGotPointerCapture(e){
+    e.target.releasePointerCapture(e.pointerId)
+  }
 </script>
 
 
 <!-- <svelte:window on:mousemove="{(e)=>handleGlobalMove(e)}"/> -->
 <main >
-  <div class="main"on:mousemove="{(e)=>handleGlobalMove(e)}">
+  <div class="main"on:pointermove="{(e)=>handleGlobalMove(e)}">
     <p class="tcenter" style="font-size: 1rem;" on:click="{debugPrintRules}">Rules:{rulesCount}</p>
     <p class="tcenter">{solvedPercent}% complete; score: {score}</p>
     
@@ -268,9 +272,10 @@
         <div class="row">
             {#each row as cell, k}
             <div class:selected={cell.selected}
-              on:pointerdown="{(e)=>handleDown(i,k,e)}"
+                on:pointerdown="{(e)=>handleDown(i,k,e)}"
                 on:pointerover="{(e)=>handleOver(i,k,e)}"
-                on:pointerup="{(e)=>handleUp(i,k,e)}"
+                on:pointerup="{(e)=>handleUp(i,k,e)}"               
+                on:gotpointercapture="{handleGotPointerCapture}"
                 >
               <div
                 class="square empty"
@@ -351,6 +356,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    touch-action: none;
   }
   .tcenter {
     text-align: center;

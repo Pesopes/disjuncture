@@ -1,5 +1,10 @@
+<script>
+  export let scanlinesOn = true
+  export let filterOn = true
+</script>
+
 <main>
-  <div class="scanlines">
+  <div class:scanlines={scanlinesOn} class:filter={filterOn} class="main">
     <slot>
 
     </slot>
@@ -14,8 +19,7 @@
 
 <!-- https://codepen.io/meduzen/pen/zxbwRV -->
 <style>
-
-  .scanlines {
+  .main{
     position: fixed;
     top: 0;
     right: 0;
@@ -24,8 +28,12 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    filter: blur(0.8px) sepia(80%) ;
   }
+  .filter{
+    filter: blur(0.6px) sepia(80%) ;
+  }
+
+
   .scanlines:before, .scanlines:after {
     display: block;
     pointer-events: none;

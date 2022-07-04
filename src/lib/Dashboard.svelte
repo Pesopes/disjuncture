@@ -15,12 +15,14 @@
     {id:2,visible:false,title:"Paint",component:Paint,image:paintIcon},
     {id:3,visible:false,title:"Settings",component:Settings,image:settingsIcon},
   ]
+
+
 </script>
 
 <div class="board" >
   {#each apps as {id,visible,title,component,image} (id)} 
       <!-- <p on:click="{()=>visible=true}">{title} </p> -->
-      <div class="app-item" on:click="{()=>visible=true}">
+      <div class="app-item" class:bop-class="{visible}" class:upside-bop-class="{!visible}" on:click="{()=>visible=true}">
         <img draggable="false"class="app-item-image" src={image} alt="icon for {title}" />
       </div>
       <svelte:component this="{component}" bind:visible={visible} title={title}/>
@@ -47,8 +49,8 @@
     text-align: center;
     cursor: pointer;
     justify-content: center;
-    padding: 5px 0px;
-    margin: 3px 10px;
+    padding: 6px 5px;
+    margin: 3px 0px;
     width: 36px;
 
 
@@ -67,7 +69,43 @@
     -ms-user-select: none;
   }
   .app-item-image:active{
-
     transform: scale(0.7);
+
+  }
+  .bop-class{
+    animation: bop 0.5s;
+    animation-iteration-count: 1;
+  }
+  .upside-bop-class{
+    animation: upside-bop 0.5s;
+    animation-iteration-count: 1;
+  }
+  @keyframes bop{
+    0%{
+      transform: translateY(0);
+    }
+    60%{
+      transform: translateY(-6px);
+    }
+    90%{
+      transform: translateY(2px);
+    }
+    100%{
+      transform: translateY(0);
+    }
+  }
+  @keyframes upside-bop{
+    0%{
+      transform: translateY(0);
+    }
+    60%{
+      transform: translateY(6px);
+    }
+    90%{
+      transform: translateY(-2px);
+    }
+    100%{
+      transform: translateY(0);
+    }
   }
 </style>

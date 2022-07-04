@@ -35,6 +35,7 @@
   </div>
 </main>
 {/if}
+
 <style>
   .background{
     position: fixed;

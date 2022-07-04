@@ -3,17 +3,19 @@
   import CrtFilter from "./lib/CrtFilter.svelte"
   import Dashboard from "./lib/Dashboard.svelte"
   import Favicon from "./assets/windows.svg"
-  //import { mulberry32} from "./lib/mulberry"
+  import { settings } from "./stores/localStorage"
+  // //import { mulberry32} from "./lib/mulberry"
 
-  let boardSeed = Math.floor(Math.random()*1000000)//mulberry32(Math.floor(Date.now()/1000/60/60/24))
-  let numOfRules = 3
+  // let boardSeed = Math.floor(Math.random()*1000000)//mulberry32(Math.floor(Date.now()/1000/60/60/24))
+  // let numOfRules = 3
+
 </script>
 
 <svelte:head>
   <link rel="icon" href={Favicon} />
 </svelte:head>
 <main>
-  <CrtFilter>
+  <CrtFilter filterOn={$settings.crtFilter} scanlinesOn={$settings.scanLines}>
     <Board/>  
     <Dashboard/>
   </CrtFilter>
