@@ -15,7 +15,7 @@
 
 {#if visible}
 <main >
-  <div class="background" transition:fade={{duration:200}} on:click={(e)=>{
+  <div class="background" transition:fade={{duration:200}} on:pointerdown={(e)=>{
     if(e.target !== e.currentTarget) return; //only on parent not children
     disablePopup()}
     }>

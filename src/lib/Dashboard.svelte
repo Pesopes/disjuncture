@@ -22,8 +22,8 @@
 <div class="board" >
   {#each apps as {id,visible,title,component,image} (id)} 
       <!-- <p on:click="{()=>visible=true}">{title} </p> -->
-      <div class="app-item" class:bop-class="{visible}" class:upside-bop-class="{!visible}" on:click="{()=>visible=true}">
-        <img draggable="false"class="app-item-image" src={image} alt="icon for {title}" />
+      <div class="app-item"  on:click="{()=>visible=true}">
+        <img draggable="false"class="app-item-image" src={image} alt="icon for {title}" class:upside-bop-class="{!visible}"class:bop-class="{visible}" />
       </div>
       <svelte:component this="{component}" bind:visible={visible} title={title}/>
   {/each}
@@ -40,7 +40,6 @@
     height: 5%;
     background-color: rgb(255, 213, 200);
     
-
     text-align: center;
     box-shadow: 0.5px 0.5px 0 0.5px black, inset 1px 1px white,inset -1px -1px #85898d;
   }
@@ -52,7 +51,8 @@
     padding: 6px 5px;
     margin: 3px 0px;
     width: 36px;
-
+    transition: background-color 0.2s;
+    border-radius: 5px;
 
   }
   .app-item:hover{
@@ -70,7 +70,6 @@
   }
   .app-item-image:active{
     transform: scale(0.7);
-
   }
   .bop-class{
     animation: bop 0.5s;

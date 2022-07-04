@@ -9,7 +9,7 @@
   let selectedNote = 0
   function newNote(){
     let newNote = {
-      name:"new note",
+      name:"new note ("+$notes.length+")",
       content:"",
       date:new Date()
     }
@@ -19,7 +19,8 @@
   }
 
   function deleteNote(note){
-    console.log($notes)
+    if($notes.length<=1) return; //dont delete last note
+
     notes.set($notes.filter(el=>new Date(el.date).getTime() !== new Date(note.date).getTime()))
     while(selectedNote>=$notes.length) selectedNote--
   }
@@ -70,7 +71,7 @@
 <Popup bind:visible={visible} title="{title}">
   <button on:click="{newNote}">New note</button>
   <button on:click="{()=>showAllNotes=true}">Load note</button>
-  <input type="number" bind:value="{selectedNote}" max="{$notes.length-1}" min="0"/>
+  <input type="number" bind:value="{selectedNote}" max="{$notes.length-1}" min="0" style="width: 50px;"/>
   <div class="text-editor" 
     contenteditable="true"
     bind:innerHTML="{$notes[selectedNote].content}"
