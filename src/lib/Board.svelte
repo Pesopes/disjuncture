@@ -198,6 +198,13 @@
     board.forEach((arr)=>{arr.forEach(el=>el.selected=false)})
   }
 
+  function handleGlobalUp(e){
+    firstPos = null
+    //unselect all
+    board.forEach((arr)=>{arr.forEach(el=>el.selected=false)})
+    handleGlobalMove(e)
+  }
+
   // Cool number effects
 
   let boardDiv = null // bound to div that contains squares
@@ -260,7 +267,7 @@
 </script>
 
 
-<!-- <svelte:window on:mousemove="{(e)=>handleGlobalMove(e)}"/> -->
+<svelte:window on:pointerup="{handleGlobalUp}"/>
 <main >
   <div class="main"on:pointermove="{(e)=>handleGlobalMove(e)}">
     <p class="tcenter" style="font-size: 1rem;" on:click="{debugPrintRules}">Rules:{rulesCount}</p>

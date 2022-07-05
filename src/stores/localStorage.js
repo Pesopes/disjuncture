@@ -2,9 +2,20 @@ import { writable } from "svelte/store";
 
 const storedNotes = JSON.parse(localStorage.getItem("notes")) || [{
   name:"First note",
-  content:"So empty...",
-  date:new Date()
-}];
+  content:"You can see all your notes by click load note or you can cycle through them using the + and - buttons",
+  date:new Date('February 18, 2022 03:24:34')
+},
+{
+  name:"Second note",
+  content:"The rules of the game like to change",
+  date:new Date('February 18, 2022 03:25:10')
+},
+{
+  name:"Third note",
+  content:"You can move this window anywhere and then pin it with the little pin icon.",
+  date:new Date('February 18, 2022 03:26:16')
+}
+];
 export const notes = writable(storedNotes);
 notes.subscribe(value => {
     localStorage.setItem("notes", JSON.stringify(value));

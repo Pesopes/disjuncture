@@ -1,6 +1,7 @@
 <script>
   import { notes } from "./../../stores/localStorage"
   import Popup from "./../Popup.svelte"
+
   export let visible = false
   export let title = "New window"
 
@@ -40,7 +41,14 @@
     let month =   pad(date.getMonth()+1,2)//btw why the **** is month from 0-11 while date is 1-31
     let year =    date.getFullYear()
     
-    return `${hour}:${minute}:${second} ${day}/${month}/${year}`
+    return `${day}/${month}/${year} ${hour}:${minute}:${second}`
+  }
+
+  function changeSelected(offset){
+    let newSelect = selectedNote+offset
+    if(newSelect>=$notes.length || newSelect<0) return
+
+    selectedNote = newSelect
   }
 </script>
 
@@ -71,7 +79,9 @@
 <Popup bind:visible={visible} title="{title}">
   <button on:click="{newNote}">New note</button>
   <button on:click="{()=>showAllNotes=true}">Load note</button>
-  <input type="number" bind:value="{selectedNote}" max="{$notes.length-1}" min="0" style="width: 50px;"/>
+  <button on:click="{()=>changeSelected(-1)}">-</button>
+  <button on:click="{()=>changeSelected(+1)}">+</button>
+  <!-- <input type="number" bind:value="{selectedNote}" max="{$notes.length-1}" min="0" style="width: 50px;"/> -->
   <div class="text-editor" 
     contenteditable="true"
     bind:innerHTML="{$notes[selectedNote].content}"
@@ -100,11 +110,8 @@
   .item{
     padding: 0px 10px;
     text-align: center;
-
   }
   .container{
-
-
     border: solid 1px #000;
   }
   .row:first-child{

@@ -1,29 +1,58 @@
 <script>
 	import { fade , blur , fly , slide , scale , draw} from 'svelte/transition';
   import { createEventDispatcher } from 'svelte';
+  import PinIcon from "./../assets/pin.svg"
 
   const dispatch = createEventDispatcher()
 
   export let visible = true
   export let title = "New window"
+  export let pinnable = true
+
+  let isPinned = false
 
   function disablePopup(){
     visible=false
     dispatch("exit")
   }
+
+  let popupObj = null
+  let toolbarObj = null
+  let titleObj = null
+  let isHold = false
+  let offset = [0,0]
+  function handleDown(e){
+    console.log(e,toolbarObj)
+    if(e.target !== toolbarObj && e.target !== titleObj) return
+    isHold = true
+    // console.log(e)
+    offset = [e.offsetX,e.offsetY]
+  }
+  function handleGlobalUp(e){
+    isHold = false
+  }
+  function handleGlobalMove(e){
+    if(!isHold) return
+    if(isPinned) return
+    popupObj.style.transform = `translate(calc(${e.clientX-offset[0]+popupObj.clientWidth}px - 50vw),calc(${e.clientY-offset[1]}px - 50vh))`;
+  }
 </script>
 
+<svelte:window on:pointerup="{handleGlobalUp}" on:pointermove="{handleGlobalMove}"/>
 {#if visible}
 <main >
-  <div class="background" transition:fade={{duration:200}} on:pointerdown={(e)=>{
+  <div class:background={!isPinned} transition:fade={{duration:200}} on:pointerdown={(e)=>{
     if(e.target !== e.currentTarget) return; //only on parent not children
     disablePopup()}
     }>
 
-    <div class="popup-container" in:fly="{{ y: 50 }}" out:scale={{duration:150,easing:(x)=>Math.sqrt(Math.pow(x,5))}}>
-      <div class="toolbar">
+    <div bind:this={popupObj} class="popup-container" in:fly="{{ y: 50 }}" out:scale={{duration:150,easing:(x)=>Math.sqrt(Math.pow(x,5))}}>
+      <div bind:this={toolbarObj} class="toolbar" on:pointerdown="{handleDown}">
         <div class="close-button" on:click="{disablePopup}"/>
-        <div class="window-title">
+        {#if pinnable}
+          <img class="pin-button" class:dark={isPinned} src="{PinIcon}" alt="Pin icon" on:click="{()=>isPinned=!isPinned}" draggable="false"/>
+        {/if}
+        <div bind:this={titleObj} class="window-title">
           {title}
         </div>
       </div>
@@ -37,6 +66,11 @@
 {/if}
 
 <style>
+
+  .dark{
+    filter: brightness(0.7);
+  }
+
   .background{
     position: fixed;
     top: 0;
@@ -49,16 +83,20 @@
     background-color: rgba(0, 0, 0, 0.507);
   }
   .popup-container{
+    resize:both;
+    overflow:auto;
+
+    position: fixed;
     display: flex;
     flex-direction: column;
-    pointer-events: none;
+
     --popup-background:#abaab8;
     z-index: 2;
-    position: fixed;
     top: 50%;
     right: 50%;
     transform: translate(50%,-50%);
     text-align: center;
+    justify-content: center;
     border-radius: 0.1em;
     background-color: var(--popup-background);
     margin: auto;
@@ -68,7 +106,8 @@
     box-shadow: 0.5px 0.5px 0 0.5px black, inset 1px 1px white,inset -1px -1px #85898d;
     max-width: 70%;
     max-height: 70%;
-
+    min-width: 18%;
+    min-height: 25%;
   }
   .toolbar{
     position: absolute;
@@ -79,6 +118,17 @@
     background-color: gray;
 
   }
+  .pin-button{
+    position: absolute;
+    top: 0;
+    right: 10%;
+    width: 10%;
+    height: 20px;
+    transform: scale(0.8);
+    background-color: rgb(184, 253, 175);
+    border-radius: 5px;
+  }
+  
   .close-button{
     position: absolute;
     top: 0;
@@ -87,7 +137,7 @@
     height: 20px;
     background-color: rgb(158, 18, 18);
   }
-  .close-button:focus,.close-button:hover {
+  .pin-button:hover,.pin-button:focus,.close-button:focus,.close-button:hover {
     cursor: pointer;
   }
   .window-title{
@@ -106,10 +156,8 @@
     -ms-user-select: none;
   }
   .popup{
-
     overflow: auto;
     padding: 40px 50px 10px; /*top,sides,bottom*/
-
   }
   div :global(button) {
     
