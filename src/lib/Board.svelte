@@ -34,6 +34,8 @@
     board = [...Array(GRID_SIZE)].map((_,i) =>
       [...Array(GRID_SIZE)].map((_,j) =>
         {return{
+          x:j,
+          y:i,
           text:Math.floor(mulberry32(seed+i+j*seed*mulberry32(i+j*i)*1000)*100),
           selected:false,
           used:false,
@@ -103,67 +105,52 @@
     })
   }
 
-  let firstPos = null
-  let secondPos = null
+  // let firstPos = null
+  // let secondPos = null
 
-  // in bounds of GRID_SIZE (true/false)
-  function inBounds(x,y){
-    if (x > GRID_SIZE || x<0 || y>GRID_SIZE || y<0) return false
-    return true
-  }
-  //if between firstpos and second pos
-  function checkSelect(x,y){
-    if (firstPos === null || secondPos === null) return false
-    if (!inBounds(x,y)) return false
-    let xCheck = x>=Math.min(firstPos[0],secondPos[0])&&x<=Math.max(firstPos[0],secondPos[0])
-    let yCheck = y>=Math.min(firstPos[1],secondPos[1])&&y<=Math.max(firstPos[1],secondPos[1])
-    return xCheck && yCheck
-  }
-
-  // sets firstPos and selects current square
+  //holds all selected BOARD squares 
+  let posArray = []
+  let isHold = false
+  //used for iterating over
+  const neighbourOffset = [
+    [-1,0],
+    [1,0],
+    [0,1],
+    [0,-1],
+  ]
+  // sets isHold true and pushes the first square
   function handleDown(x,y,e){
-    firstPos = [x,y]
+    isHold = true
+    posArray.push(board[x][y])
     board[x][y].selected = true
   }
 
-  //selects from firstPos to second pos
+  //add square if it is neighbour and not already in the array
   function handleOver(x,y,e){
-    if (firstPos===null) return;
+    if(posArray.length <=0 || !isHold) return
 
-    secondPos = [x,y]
-    //unselect
-    board.forEach((arr)=>{arr.forEach(el=>el.selected=false)})
-    //loop trough everything and select
-    for (let i = 0; i < GRID_SIZE; i++) {
-      for (let j = 0; j < GRID_SIZE; j++) {
-        if(board[i][j].selected === false && checkSelect(i,j)){
-          board[i][j].selected = true
-        }
+    // if(!isNeighbour(board[x][y],posArray[posArray.length-1])) return
+    let isNeighbourArray = neighbourOffset.map(offset=>{
+      try{
+        return posArray.includes(board[x+offset[0]][y+offset[1]])
+      }catch{
+        //FIXME:??maybe I should actually check if it is in the array
+        return false
       }
+    })
+    let atLeastOneNeighbour = false
+    isNeighbourArray.forEach(isNeighbour=>{if(isNeighbour){atLeastOneNeighbour=true}})
+    if(atLeastOneNeighbour && !posArray.includes(board[x][y])){
+      posArray.push(board[x][y])
+      board[x][y].selected = true
     }
-
+    // console.log(posArray)
   }
   // Checking rules and stuff
   function handleUp(x,y,e){
-    // first get all squares to check by reference
-    let checkingArray = []
-    if (firstPos === null) {
-      return
-    }else
-    if (secondPos === null){
-      checkingArray.push(board[firstPos[0]][firstPos[1]])
-    }else{
-      for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; j++) {
-          if(checkSelect(i,j)){
-            checkingArray.push(board[i][j])
-          }
-        }
-      }
-    }
     //only if all have at least 1 rule continue
     let isValid = true
-    checkingArray.forEach(el=>{
+    posArray.forEach(el=>{
       if(!checkRule(el.text,getRuleFunctions(seed,rulesCount))){
         isValid=false
       }
@@ -171,7 +158,7 @@
     //only assign points if all satisfy at least 1 rule
     if(isValid){      
       let notUsed = 0
-      checkingArray.forEach(el=>{
+      posArray.forEach(el=>{
         if(checkRule(el.text,getRuleFunctions(seed,rulesCount))){
           if (!el.used) {
             el.used= true
@@ -189,20 +176,25 @@
     if(e!==null)
       handleGlobalMove(e)
 
-    //reset vars
-    board[firstPos[0]][firstPos[1]].selected = false
-    firstPos = null
-    secondPos = null
-    
+    if(numOfSolved>=solvable){
+      const settingsCache = $settings
+      settingsCache.gameSettings.seed = Math.random() * 1000000
+      settings.set(settingsCache)
+    }
+
     //unselect all
     board.forEach((arr)=>{arr.forEach(el=>el.selected=false)})
   }
 
   function handleGlobalUp(e){
-    firstPos = null
+    // firstPos = null
+    isHold = false
+    posArray = []
     //unselect all
     board.forEach((arr)=>{arr.forEach(el=>el.selected=false)})
-    handleGlobalMove(e)
+    
+    // FIXME:clicking for example in a popup triggers this => not good 
+    // handleGlobalMove(e)
   }
 
   // Cool number effects
@@ -247,6 +239,7 @@
         if (board[x][y].used) {
           size /= 2
         }
+
         // is this faster ??
         if(displayShadows){
           const dropShadowCache = board[x][y].dropshadow

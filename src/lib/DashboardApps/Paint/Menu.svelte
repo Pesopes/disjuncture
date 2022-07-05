@@ -30,7 +30,7 @@
 		text-align: center;
 		outline: 1px solid transparent;
 		outline-offset: 2px !important;
-		background: var(--bg-color);
+		background: var(--bg-color) !important;
     width: 35px;
 		height: 35px;
 		margin: 0;

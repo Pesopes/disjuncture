@@ -22,7 +22,6 @@
   let isHold = false
   let offset = [0,0]
   function handleDown(e){
-    console.log(e,toolbarObj)
     if(e.target !== toolbarObj && e.target !== titleObj) return
     isHold = true
     // console.log(e)
