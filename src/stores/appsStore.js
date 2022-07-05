@@ -14,11 +14,19 @@ import settingsIcon from "../assets/Icons/settings.svg"
 import storeIcon from "../assets/Icons/store.svg"
 import internetIcon from "../assets/Icons/internet.svg"
 
-export const apps = writable([
+const defualtApps= [
   {id:0,visible:false,isPinned:false,unlocked:true,cost:0,title:"Notepad",component:Notepad,image:noteIcon},
   {id:1,visible:false,isPinned:false,unlocked:false,cost:50,title:"Calculator",component:Calculator,image:calculatorIcon},
   {id:2,visible:false,isPinned:false,unlocked:false,cost:100,title:"Paint",component:Paint,image:paintIcon},
   {id:3,visible:false,isPinned:false,unlocked:true,cost:0,title:"Settings",component:Settings,image:settingsIcon},
   {id:4,visible:false,isPinned:false,unlocked:true,cost:0,title:"Store",component:Store,image:storeIcon},
   {id:5,visible:false,isPinned:false,unlocked:false,cost:10,title:"Internet explurer",component:Internet,image:internetIcon},
-])
+]
+
+export const storedApps = JSON.parse(localStorage.getItem("apps"))|| defualtApps
+
+export const apps = writable(storedApps.map((el,_)=>{return {...defualtApps[_],...el}}))
+
+apps.subscribe(value => {
+  localStorage.setItem("apps", JSON.stringify(value));
+});

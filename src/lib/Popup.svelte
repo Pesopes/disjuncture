@@ -97,7 +97,7 @@
     right: 50%;
     transform: translate(50%,-50%);
     text-align: center;
-    justify-content: center;
+    /* justify-content: center; */
     border-radius: 0.1em;
     background-color: var(--popup-background);
     margin: auto;

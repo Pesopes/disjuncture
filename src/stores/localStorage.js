@@ -49,16 +49,3 @@ export const settings = writable(storedSettings);
 settings.subscribe(value => {
   localStorage.setItem("settings", JSON.stringify(value));
 });
-
-import InternetIcon from "./../assets/Icons/store.svg"
-// Store
-export const storeAppsDefault = [
-  {id:0,name:"Internet",unlocked:false,image:InternetIcon}
-]
-
-const storedStoreApps = JSON.parse(localStorage.getItem("storeApps"))|| storeAppsDefault
-
-export const storeApps = writable(storedStoreApps);
-storeApps.subscribe(value => {
-  localStorage.setItem("storeApps", JSON.stringify(value));
-});
