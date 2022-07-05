@@ -1,15 +1,11 @@
 <script>
   import Popup from "./../Popup.svelte"
   import { settings, settingsDefault } from "../../stores/localStorage"
-  import {get} from 'svelte/store'
-  import { onMount, onDestroy} from "svelte"
+  import { get } from 'svelte/store'
 
   export let visible = false
   export let title = "New window"
   let settingsCache = JSON.parse(JSON.stringify(get(settings)))
-  let settingsBackup = JSON.parse(JSON.stringify(settingsCache))
-
-  
 </script>
 
 <Popup bind:visible={visible} title="{title}" on:exit={()=>settingsCache = JSON.parse(JSON.stringify(get(settings)))}>

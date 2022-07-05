@@ -3,29 +3,34 @@
   import Calculator from "./DashboardApps/Calculator.svelte"
   import Paint from "./DashboardApps/Paint.svelte"
   import Settings from "./DashboardApps/Settings.svelte"
+  import Store from "./DashboardApps/Store.svelte"
 
   import noteIcon from "../assets/Icons/note.svg"
   import calculatorIcon from "../assets/Icons/calculator.svg"
   import paintIcon from "../assets/Icons/paint.svg"
   import settingsIcon from "../assets/Icons/settings.svg"
+  import storeIcon from "../assets/Icons/store.svg"
 
   let apps = [
-    {id:0,visible:false,title:"Notepad",component:Notepad,image:noteIcon},
-    {id:1,visible:false,title:"Calculator",component:Calculator,image:calculatorIcon},
-    {id:2,visible:false,title:"Paint",component:Paint,image:paintIcon},
-    {id:3,visible:false,title:"Settings",component:Settings,image:settingsIcon},
+    {id:0,visible:false,unlocked:true,title:"Notepad",component:Notepad,image:noteIcon},
+    {id:1,visible:false,unlocked:true,title:"Calculator",component:Calculator,image:calculatorIcon},
+    {id:2,visible:false,unlocked:true,title:"Paint",component:Paint,image:paintIcon},
+    {id:3,visible:false,unlocked:true,title:"Settings",component:Settings,image:settingsIcon},
+    {id:4,visible:false,unlocked:true,title:"Store",component:Store,image:storeIcon},
   ]
 
 
 </script>
 
 <div class="board" >
-  {#each apps as {id,visible,title,component,image} (id)} 
+  {#each apps as {id,visible,unlocked,title,component,image} (id)} 
       <!-- <p on:click="{()=>visible=true}">{title} </p> -->
+      {#if unlocked}
       <div class="app-item"  on:click="{()=>visible=true}">
         <img draggable="false"class="app-item-image" src={image} alt="icon for {title}" class:upside-bop-class="{!visible}"class:bop-class="{visible}" />
       </div>
       <svelte:component this="{component}" bind:visible={visible} title={title}/>
+      {/if}
   {/each}
 </div>
 
@@ -83,8 +88,8 @@
     0%{
       transform: translateY(0);
     }
-    60%{
-      transform: translateY(-6px);
+    40%, 60%{
+      transform: translateY(-4px);
     }
     90%{
       transform: translateY(2px);
@@ -97,8 +102,8 @@
     0%{
       transform: translateY(0);
     }
-    60%{
-      transform: translateY(6px);
+    40%, 60%{
+      transform: translateY(4px);
     }
     90%{
       transform: translateY(-2px);

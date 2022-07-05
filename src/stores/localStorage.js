@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 
+// Notes
 const storedNotes = JSON.parse(localStorage.getItem("notes")) || [{
   name:"First note",
   content:"You can see all your notes by click load note or you can cycle through them using the + and - buttons",
@@ -21,6 +22,7 @@ notes.subscribe(value => {
     localStorage.setItem("notes", JSON.stringify(value));
 });
 
+// Settings
 export const settingsDefault = {
   gameSettings:{
     rulesCount:3,
@@ -39,4 +41,17 @@ const storedSettings = JSON.parse(localStorage.getItem("settings"))|| settingsDe
 export const settings = writable(storedSettings);
 settings.subscribe(value => {
   localStorage.setItem("settings", JSON.stringify(value));
+});
+
+import InternetIcon from "./../assets/Icons/store.svg"
+// Store
+export const storeAppsDefault = [
+  {id:0,name:"Internet",unlocked:false,image:InternetIcon}
+]
+
+const storedStoreApps = JSON.parse(localStorage.getItem("storeApps"))|| storeAppsDefault
+
+export const storeApps = writable(storedStoreApps);
+storeApps.subscribe(value => {
+  localStorage.setItem("storeApps", JSON.stringify(value));
 });

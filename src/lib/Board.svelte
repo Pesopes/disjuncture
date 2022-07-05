@@ -5,9 +5,10 @@
   import { mulberry32 } from "./mulberry"
   import { onMount } from "svelte";
   import { settings } from "../stores/localStorage"
+import { get } from 'svelte/store';
 
   let GRID_SIZE = 18;
-  $: seed = $settings.gameSettings.seed
+ 
   $: rulesCount = $settings.gameSettings.rulesCount
   let board
   let score = 0
@@ -36,7 +37,7 @@
         {return{
           x:j,
           y:i,
-          text:Math.floor(mulberry32(seed+i+j*seed*mulberry32(i+j*i)*1000)*100),
+          text:Math.floor(mulberry32($settings.gameSettings.seed+i+j*$settings.gameSettings.seed*mulberry32(i+j*i)*1000)*100),
           selected:false,
           used:false,
           scale:1,
@@ -46,27 +47,28 @@
     score = 0
     numOfSolved = 0
     
-    solvable = countSolvable(seed)
+    solvable = countSolvable($settings.gameSettings.seed)
     
-    
-    if(solvable==0){
-      console.warn ("Board not solvable")
-    }else{
-      console.log("Created board\nSolvable squares: %c"+solvable,"color:green;")
-    }
+    // if(solvable==0){
+    //   console.warn ("Board not solvable")
+    // }else{
+      console.log(`Created board with seed: ${$settings.gameSettings.seed}\nSolvable squares: %c${solvable}`,solvable===0?"color:red;":"color:green;")
+    // }
 
     if(!firstInit){
+      //All squares will be small
       handleGlobalMove({pageX:99999,pageY:99999})
     }
   }
-  //All squares will be small at start
   onMount(()=>{
     init(true)
+    //All squares will be small at start
     handleGlobalMove({pageX:99999,pageY:99999})
   })
   $: solvedPercent = Math.round(numOfSolved / solvable *100 )
-
-  // update board when settings change (BUG: changes even from settings that dont affect the board like visual stuff)
+  
+  // update board when settings change (FIXME: changes even from settings that dont affect the board like visual stuff)
+  // FIXME: I have to create some board through init before onMount but then it warns me that I have 0 solvable
   const settingsUnsubscribe = settings.subscribe(()=>init(false))
   onDestroy(settingsUnsubscribe)
 
@@ -77,7 +79,9 @@
       let newSeed = Math.floor(Math.random()*10000)
       let newSolvable = countSolvable(newSeed)
       if(newSolvable>solveMin){
-        seed = newSeed
+        const settingsCache = $settings
+        settingsCache.gameSettings.seed=newSeed
+        settings.set(settingsCache)
         init(false)
         return true
       }
@@ -100,7 +104,7 @@
 
   //prints all rule functions to console
   function debugPrintRules(){
-    getRuleFunctions(seed,rulesCount).forEach((fun)=>{
+    getRuleFunctions($settings.gameSettings.seed,rulesCount).forEach((fun)=>{
       console.log(fun.toString())
     })
   }
@@ -151,7 +155,7 @@
     //only if all have at least 1 rule continue
     let isValid = true
     posArray.forEach(el=>{
-      if(!checkRule(el.text,getRuleFunctions(seed,rulesCount))){
+      if(!checkRule(el.text,getRuleFunctions($settings.gameSettings.seed,rulesCount))){
         isValid=false
       }
     })
@@ -159,7 +163,7 @@
     if(isValid){      
       let notUsed = 0
       posArray.forEach(el=>{
-        if(checkRule(el.text,getRuleFunctions(seed,rulesCount))){
+        if(checkRule(el.text,getRuleFunctions($settings.gameSettings.seed,rulesCount))){
           if (!el.used) {
             el.used= true
             notUsed++
@@ -178,6 +182,7 @@
 
     if(numOfSolved>=solvable){
       const settingsCache = $settings
+      console.log("RANDOM???")
       settingsCache.gameSettings.seed = Math.random() * 1000000
       settings.set(settingsCache)
     }
