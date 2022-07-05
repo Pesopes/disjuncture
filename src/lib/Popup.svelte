@@ -8,8 +8,8 @@
   export let visible = true
   export let title = "New window"
   export let pinnable = true
+  export let isPinned = false
 
-  let isPinned = false
 
   function disablePopup(){
     visible=false
@@ -40,12 +40,12 @@
 <svelte:window on:pointerup="{handleGlobalUp}" on:pointermove="{handleGlobalMove}"/>
 {#if visible}
 <main >
-  <div class:background={!isPinned} transition:fade={{duration:200}} on:pointerdown={(e)=>{
+  <div class:background={!isPinned} class:on-top={!isPinned} transition:fade={{duration:200}} on:pointerdown={(e)=>{
     if(e.target !== e.currentTarget) return; //only on parent not children
     disablePopup()}
     }>
 
-    <div bind:this={popupObj} class="popup-container" in:fly="{{ y: 50 }}" out:scale={{duration:150,easing:(x)=>Math.sqrt(Math.pow(x,5))}}>
+    <div bind:this={popupObj}  class="popup-container" in:fly="{{ y: 50, duration:200}}" out:scale={{duration:150,easing:(x)=>Math.sqrt(Math.pow(x,5))}}>
       <div bind:this={toolbarObj} class="toolbar" on:pointerdown="{handleDown}">
         <div class="close-button" on:click="{disablePopup}"/>
         {#if pinnable}
@@ -69,7 +69,9 @@
   .dark{
     filter: brightness(0.7);
   }
-
+  .on-top{
+    z-index: 420 !important;
+  }
   .background{
     position: fixed;
     top: 0;
@@ -110,7 +112,7 @@
   }
   .toolbar{
     position: absolute;
-    z-index: 1000;
+    z-index: 30;
     height: 20px;
     width: 100%;
     top: 0px;
@@ -172,7 +174,7 @@
     background-color: rgb(143, 142, 142);
     text-align: center;
   }
-  div :global(button:active) {
+  div :global(button:active:not([disabled])) {
 
     border-image:  linear-gradient(to bottom right,black 0% 50%,white 50% 100%) 1;
 

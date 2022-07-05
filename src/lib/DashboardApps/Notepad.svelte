@@ -3,6 +3,7 @@
   import Popup from "./../Popup.svelte"
 
   export let visible = false
+  export let isPinned = false
   export let title = "New window"
 
   let showAllNotes = false
@@ -52,6 +53,7 @@
   }
 </script>
 
+<!-- Load note popup -->
 <div style="z-index: 3;">
   <Popup bind:visible={showAllNotes} title="Load note"> 
       <table class="container">
@@ -76,7 +78,8 @@
   </Popup>
 </div>
 
-<Popup bind:visible={visible} title="{title}">
+<!-- Note popup -->
+<Popup bind:visible bind:isPinned title="{title}">
   <button on:click="{newNote}">New note</button>
   <button on:click="{()=>showAllNotes=true}">Load note</button>
   <button on:click="{()=>changeSelected(-1)}">-</button>

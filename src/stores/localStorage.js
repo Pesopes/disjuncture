@@ -13,13 +13,20 @@ const storedNotes = JSON.parse(localStorage.getItem("notes")) || [{
 },
 {
   name:"Third note",
-  content:"You can move this window anywhere and then pin it with the little pin icon.",
+  content:"You can move this window anywhere and then pin it with the little pin icon.<br/><br/>Maybe write the rules of the game here but you know do whatever you want as long as I get paid",
   date:new Date('February 18, 2022 03:26:16')
 }
 ];
 export const notes = writable(storedNotes);
 notes.subscribe(value => {
     localStorage.setItem("notes", JSON.stringify(value));
+});
+
+// Score
+const storedScore = JSON.parse(localStorage.getItem("score")) || 0
+export const score = writable(storedScore);
+score.subscribe(value => {
+    localStorage.setItem("score", JSON.stringify(value));
 });
 
 // Settings

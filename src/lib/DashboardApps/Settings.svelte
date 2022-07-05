@@ -5,10 +5,12 @@
 
   export let visible = false
   export let title = "New window"
+  export let isPinned = false
+
   let settingsCache = JSON.parse(JSON.stringify(get(settings)))
 </script>
 
-<Popup bind:visible={visible} title="{title}" on:exit={()=>settingsCache = JSON.parse(JSON.stringify(get(settings)))}>
+<Popup bind:visible bind:isPinned title="{title}" on:exit={()=>settingsCache = JSON.parse(JSON.stringify(get(settings)))}>
   <label>
     Rendering sphere size:
     <input type="number" bind:value="{settingsCache.renderSize}" min="50 "/><br/>

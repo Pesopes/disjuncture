@@ -4,14 +4,12 @@
   import { getRuleFunctions } from "./Rules"
   import { mulberry32 } from "./mulberry"
   import { onMount } from "svelte";
-  import { settings } from "../stores/localStorage"
-import { get } from 'svelte/store';
+  import { settings, score } from "../stores/localStorage"
 
   let GRID_SIZE = 18;
  
   $: rulesCount = $settings.gameSettings.rulesCount
   let board
-  let score = 0
   let numOfSolved = 0
   let solvable = 0
   //count how many squares are valid for some seed
@@ -44,7 +42,6 @@ import { get } from 'svelte/store';
           dropshadow: "none"
         }})
         );
-    score = 0
     numOfSolved = 0
     
     solvable = countSolvable($settings.gameSettings.seed)
@@ -172,7 +169,7 @@ import { get } from 'svelte/store';
         }
       })
       //give points and count solved
-      score += notUsed * notUsed
+      score.set($score+notUsed * notUsed)
       numOfSolved += notUsed
     }
     
@@ -269,7 +266,7 @@ import { get } from 'svelte/store';
 <main >
   <div class="main"on:pointermove="{(e)=>handleGlobalMove(e)}">
     <p class="tcenter" style="font-size: 1rem;" on:click="{debugPrintRules}">Rules:{rulesCount}</p>
-    <p class="tcenter">{solvedPercent}% complete; score: {score}</p>
+    <p class="tcenter">{solvedPercent}% complete; score: {$score}</p>
     
     <div class="center">
       <div  bind:this="{boardDiv}">
