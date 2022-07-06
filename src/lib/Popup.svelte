@@ -9,7 +9,7 @@
   export let title = "New window"
   export let pinnable = true
   export let isPinned = false
-
+  export let backgroundColor = "#abaab8"
 
   function disablePopup(){
     visible=false
@@ -45,7 +45,7 @@
     disablePopup()}
     }>
 
-    <div bind:this={popupObj}  class="popup-container" in:fly="{{ y: 50, duration:200}}" out:scale={{duration:150,easing:(x)=>Math.sqrt(Math.pow(x,5))}}>
+    <div bind:this={popupObj} style="--popup-background:{backgroundColor};" class="popup-container" in:fly="{{ y: 50, duration:200}}" out:scale={{duration:150,easing:(x)=>Math.sqrt(Math.pow(x,5))}}>
       <div bind:this={toolbarObj} class="toolbar" on:pointerdown="{handleDown}">
         <div class="close-button" on:click="{disablePopup}"/>
         {#if pinnable}
@@ -91,7 +91,7 @@
     display: flex;
     flex-direction: column;
 
-    --popup-background:#abaab8;
+
     z-index: 2;
     top: 50%;
     right: 50%;
