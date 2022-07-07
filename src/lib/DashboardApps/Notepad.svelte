@@ -1,6 +1,9 @@
 <script>
   import { notes } from "./../../stores/localStorage"
   import Popup from "./../Popup.svelte"
+  import { apps } from "./../../stores/appsStore"
+
+  //BUG: the laod note popup is not on top
 
   export let visible = false
   export let isPinned = false
@@ -8,7 +11,15 @@
 
   let showAllNotes = false
 
-  let selectedNote = 0
+  //There has to be a better way
+  //but this is my first svelte project I guess
+  function setSelectedNote(num){
+    let appCache = $apps
+    appCache[0].appInfo.selectedNote = num
+    apps.set(appCache)
+  }
+  
+  //Create new note and select it
   function newNote(){
     let newNote = {
       name:"new note ("+$notes.length+")",
@@ -16,25 +27,32 @@
       date:new Date()
     }
 
+    //add note
     notes.set([...$notes,newNote])
-    selectedNote = $notes.length-1
+    //select last note (the new one)
+    setSelectedNote($notes.length-1)
   }
 
+  //Delete note based on Date
   function deleteNote(note){
     if($notes.length<=1) return; //dont delete last note
 
     notes.set($notes.filter(el=>new Date(el.date).getTime() !== new Date(note.date).getTime()))
-    while(selectedNote>=$notes.length) selectedNote--
+    
+    while($apps[0].appInfo.selectedNote>=$notes.length) setSelectedNote($apps[0].appInfo.selectedNote-1)
+    
   }
 
+  //"day/month/year hour:minutes:seconds"
   function formatDate(date){
     date = new Date(date)
+    
+    //5 -> 05 , 12 -> 12
     function pad(num, size) {
       num = num.toString();
       while (num.length < size) num = "0" + num;
       return num;
     }
-    //5 -> 05 , 12 -> 12
     let hour =    pad(date.getHours(),2)
     let minute =  pad(date.getMinutes(),2)
     let second =  pad(date.getSeconds(),2)
@@ -45,11 +63,12 @@
     return `${day}/${month}/${year} ${hour}:${minute}:${second}`
   }
 
+  //change selected note +1 -> next note
   function changeSelected(offset){
-    let newSelect = selectedNote+offset
+    let newSelect = $apps[0].appInfo.selectedNote+offset
     if(newSelect>=$notes.length || newSelect<0) return
 
-    selectedNote = newSelect
+    setSelectedNote(newSelect)
   }
 </script>
 
@@ -69,7 +88,7 @@
             <td class="item">{formatDate(note.date)}</td>
             <!-- <td class="item">{note.content.slice(0,10)}</td> -->
             <td>
-              <button class="item" on:click="{()=>{selectedNote=i;showAllNotes=false}}">Select</button>
+              <button class="item" on:click="{()=>{setSelectedNote(i);showAllNotes=false}}">Select</button>
               <button class="item" on:click="{()=>deleteNote(note)}">Delete</button>
             </td>
           </tr>
@@ -87,7 +106,7 @@
   <!-- <input type="number" bind:value="{selectedNote}" max="{$notes.length-1}" min="0" style="width: 50px;"/> -->
   <div class="text-editor" 
     contenteditable="true"
-    bind:innerHTML="{$notes[selectedNote].content}"
+    bind:innerHTML="{$notes[$apps[0].appInfo.selectedNote].content}"
     >
   </div>
 </Popup>

@@ -3,12 +3,10 @@
   import { score } from "../../stores/localStorage"
   import { apps } from "./../../stores/appsStore"
   import DownArrow from "./../../assets/arrow-down.svg"
-	import { slide } from 'svelte/transition';
-	import { tweened } from 'svelte/motion';
-	import { cubicOut } from 'svelte/easing';
-  import { onDestroy } from 'svelte';
-  import { writable } from 'svelte/store';
+	import { slide, fade } from 'svelte/transition';
 
+
+  //TODO: you can see if you installed the app before you click the dropdown and when the dropdown appears the information fades away
   export let visible = false
   export let title = "New window"
   export let isPinned = false
@@ -20,8 +18,6 @@
     installing:false,
     installProgress:0
   }})
-
-
   
   function purchase(app){
     if(app.cost > $score) return
@@ -43,33 +39,66 @@
       const cachedApps = $apps
       cachedApps[app.id].unlocked = true
       apps.set(cachedApps)
-      console.log($apps)
       clearInterval(progressInterval)
     },installTime)
   }
+
+  function formatPrice(papp){
+    if(papp.unlocked){
+      return "Installed"
+    }else if(papp.cost <= 0){
+      return "Free"
+    }else{
+      return "Price: "+papp.cost
+    }
+  }
+
+  let searchQuery = ""
+  let onlyNotInstalled = false
 </script>
 
 <Popup bind:visible bind:isPinned title="{title}" backgroundColor=" #F0FFFF ">
   <!-- <input type="number" bind:value="{$score}"/> -->
-  {#each $apps as app (app.id)}
+  <label>
+    Search:
+    <input type="text" bind:value="{searchQuery}"/>
+  </label>
+  <br/>
+  <label>
+    Only not installed:
+    <input type="checkbox" bind:checked="{onlyNotInstalled}"/>
+  </label>
+  {#each $apps.filter(el=>{
+    if(onlyNotInstalled){
+      return  el.title.toLowerCase().includes(searchQuery.toLowerCase())&&!el.unlocked
+    }else{
+      return el.title.toLowerCase().includes(searchQuery.toLowerCase())
+    }
+  }).sort((a,b)=>a.title.localeCompare(b.title)) as app (app.id)}
     <div style="position: static;">
 
-      <div class="app-container" on:click="{()=>internalApps[app.id].dropwdown=!internalApps[app.id].dropwdown}">
+      <div class="app-container" on:click="{()=>internalApps[app.id].dropdown=!internalApps[app.id].dropdown}">
         <img class="app-icon" src="{app.image}" alt="icon for {app.title}"/>
         <span class="app-title">{app.title}</span>
         <div class="app-arrow" >
-          <img class:upside-down={internalApps[app.id].dropwdown} draggable="false" src="{DownArrow}" alt="icon for {app.title}"/>
+          <img class:upside-down={internalApps[app.id].dropdown} draggable="false" src="{DownArrow}" alt="icon for {app.title}"/>
         </div>
+        {#if !internalApps[app.id].dropdown}
+        <div transition:fade={{duration:300}}>
+          <span class="app-price">{formatPrice(app)}</span>
+          <span class="app-description">{@html app.description.slice(0,23)+"..."}</span>
+        </div>
+        {/if}
       </div>
-      {#if internalApps[app.id].dropwdown}
+      {#if internalApps[app.id].dropdown}
         <div class="app-dropdown" transition:slide>
-          <div>{app.description}</div>
+          <div style="margin-bottom: 10px;">{@html app.description}</div>
           {#if app.unlocked}
             <button disabled style="cursor: not-allowed;">
                 Unlocked
             </button>
           {:else if !internalApps[app.id].purchased}
-            <button on:click="{()=>purchase(app)}">{app.cost}</button>
+            <button on:click="{()=>purchase(app)}">{formatPrice(app)}</button>
           {:else if internalApps[app.id].installing}
             <progress value={internalApps[app.id].installProgress}></progress>
           {:else}
@@ -109,7 +138,7 @@
   .app-dropdown{
     position: relative;
     width: 400px;
-
+    text-align: center;
     border: 2px solid black;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -137,6 +166,26 @@
     padding: 5px;
     background-color: #ffd5c8;
     border-radius: 10px;
+  }
+  .app-price{
+    position: absolute;
+    left: calc(74px + 25px);
+    top: 40px;
+
+    user-select: none;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 400;
+  }
+  .app-description{
+    position: absolute;
+    left: calc(74px + 25px);
+    top: 60px;
+
+    user-select: none;
+    font-size: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 400;
   }
   .app-title{
     position: absolute;

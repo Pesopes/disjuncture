@@ -43,7 +43,6 @@
     width: 36px;
     transition: background-color 0.2s;
     border-radius: 5px;
-
   }
   .app-item:hover{
     border-radius: 5px;
