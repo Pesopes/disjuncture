@@ -1,0 +1,13 @@
+//deploy
+firebase deploy --only hosting:disjuncture 
+
+//First delete the Dist directory while holding shift
+npm run build
+
+//the only thing that works
+npm run dev
+
+
+//open => open in browser
+//host => host on lan
+npm run dev -- --host --open  
