@@ -8,7 +8,6 @@
 
   // let boardSeed = Math.floor(Math.random()*1000000)//mulberry32(Math.floor(Date.now()/1000/60/60/24))
   // let numOfRules = 3
-
 </script>
 
 <svelte:head>

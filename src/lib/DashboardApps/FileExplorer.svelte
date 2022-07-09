@@ -1,6 +1,7 @@
 <script>
   import Popup from "./../Popup.svelte"
   import Folder from "./Folders/Folder.svelte"
+  import {srcObj} from "./Folders/srcLocations"
 	import { notes } from "./../../stores/localStorage"
   import { apps } from "./../../stores/appsStore"
 	import { onDestroy } from "svelte";
@@ -9,10 +10,51 @@
 	import kytaravecSound from "./../../assets/sounds/kytaravec.wav"
 	import coolBeatSound from "./../../assets/sounds/cool beat.wav"
 
+
+	
   //Exports
   export let visible = false
   export let title = "New window"
   export let isPinned = false
+
+
+	// console.log(import("./../Popup.svelte?raw"))
+	function assignFunction(objs){
+
+		if(objs!==undefined){
+			if(objs.files===undefined){
+				objs.clickEvent = () => openCode(objs.path)
+				return
+			}
+			objs.files.forEach(element => {
+				assignFunction(element)
+			});
+		}
+	}
+	assignFunction({
+		name:"test",
+		files:srcObj
+	})
+	function generateSrc(){
+	}
+	
+	//TODO: open sound file as sound, image as image ... not as text
+	let codeViewers = []
+	async function openCode(codePath){
+		// const file = await import(codePath+"?raw")
+		console.log(codePath)
+		const file = await fetch("https://raw.githubusercontent.com/Pesopes/disjuncture/master/src/"+codePath.slice(8))
+		const content = await file.text()
+		console.log(content)
+		codeViewers = [...codeViewers,
+			{
+				src:file,
+				content:content,
+				type:"fileType",
+				visible:true,
+				title:codePath
+		}]
+	}
 
 	function openNote(noteDate){
 		let cache = $apps
@@ -49,12 +91,17 @@
 		errorMessageVisible = true
 	}
 
+	//TODO: deno has script make dynamic folder of this source code (very meta)
 	let root = null
 	function refreshRoot(){
 			root = [
 			{
 				name: 'My notes',
 				files: $notes.map(el=>{return {name:el.name+".txt",clickEvent:()=>openNote(el.date)}})
+			},
+			{
+				name: 'Src',
+				files: srcObj
 			},
 			{
 				name: "System 123",
@@ -138,6 +185,17 @@
 <Popup bind:visible bind:isPinned title="{title}">
   <Folder name="Home" files={root} expanded/>
 </Popup>
+
+{#each codeViewers as codeViewer}
+	<Popup bind:visible={codeViewer.visible} title={codeViewer.title}>
+		<div>
+			{codeViewer.content}
+		</div>
+		<a style="position: absolute;bottom: 0%;left:50%;" href="{codeViewer.source}" download>
+			<img src="{codeViewer.src}" alt="Download" width="20"/>
+		</a>
+	</Popup>
+{/each}
 
 {#each imageViewers as imageViewer}
 	<Popup bind:visible={imageViewer.visible} title={imageViewer.title}>

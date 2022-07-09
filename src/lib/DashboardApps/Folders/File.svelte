@@ -3,6 +3,7 @@
 
 	export let name;
 	export let clickEvent = null;
+	export let path = "kul"
 	let type = name.slice(name.lastIndexOf('.') + 1);
 	let src = `/icons/${type}.svg`
 
