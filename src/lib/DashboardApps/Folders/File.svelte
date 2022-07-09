@@ -4,6 +4,7 @@
 	export let name;
 	export let clickEvent = null;
 	export let path = "kul"
+	path = "bruh"//this is so svelte doesn't yell at me :)
 	let type = name.slice(name.lastIndexOf('.') + 1);
 	let src = `/icons/${type}.svg`
 
