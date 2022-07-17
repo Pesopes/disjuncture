@@ -1,5 +1,14 @@
 import { writable } from "svelte/store";
 
+const version = 2
+
+const currVersion = parseInt(localStorage.getItem("version")) || null
+if(currVersion===null){
+  localStorage.clear()
+}else if(currVersion<version){
+  localStorage.clear()
+}
+localStorage.setItem("version",version.toString())
 // Notes
 const storedNotes = JSON.parse(localStorage.getItem("notes")) || [{
   name:"First note",

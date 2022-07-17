@@ -1,13 +1,23 @@
 import { writable } from "svelte/store";
-
+//WHY!!!!
+// @ts-ignore
 import Notepad from "./../lib/DashboardApps/Notepad.svelte"
+// @ts-ignore
 import Calculator from "./../lib/DashboardApps/Calculator.svelte"
+// @ts-ignore
 import Paint from "./../lib/DashboardApps/Paint.svelte"
+// @ts-ignore
 import Settings from "./../lib/DashboardApps/Settings.svelte"
+// @ts-ignore
 import Store from "./../lib/DashboardApps/Store.svelte"
+// @ts-ignore
 import Internet from "./../lib/DashboardApps/Internet.svelte"
+// @ts-ignore
 import FileExplorer from "./../lib/DashboardApps/FileExplorer.svelte"
+// @ts-ignore
 import About from "./../lib/DashboardApps/About.svelte"
+// @ts-ignore
+import Chat from "./../lib/DashboardApps/Chat.svelte"
 
 import noteIcon from "../assets/Icons/note.svg"
 import calculatorIcon from "../assets/Icons/calculator.svg"
@@ -17,6 +27,7 @@ import storeIcon from "../assets/Icons/store.svg"
 import internetIcon from "../assets/Icons/internet.svg"
 import fileExplorerIcon from "../assets/Icons/folder.svg"
 import aboutIcon from "../assets/Icons/about.svg"
+import chatIcon from "../assets/Icons/chat.svg"
 
 const defualtApps= [
   {id:0,visible:false,isPinned:false,unlocked:true,cost:0,title:"Notepad",component:Notepad,image:noteIcon,description:"This is the basic note taking app.",appInfo:{selectedNote:0}},
@@ -27,6 +38,7 @@ const defualtApps= [
   {id:5,visible:false,isPinned:false,unlocked:false,cost:10,title:"Internet explurer",component:Internet,image:internetIcon,description:"The only good web browser available."},
   {id:6,visible:false,isPinned:false,unlocked:false,cost:200,title:"File explurer",component:FileExplorer,image:fileExplorerIcon,description:"Browse through your computer with ease. Who knows what you will find in there.<br/>Additionally comes with a built-in image,sound and code(WIP) viewer."},
   {id:7,visible:false,isPinned:false,unlocked:false,cost:0,title:"About",component:About,image:aboutIcon,description:"Get some information about this computer.<br/>Free of charge you just have to install it."},
+  {id:8,visible:false,isPinned:false,unlocked:false,cost:10,title:"Chat",component:Chat,image:chatIcon,description:"Chat with other disjunctors!"},
 ]
 
 export const storedApps = JSON.parse(localStorage.getItem("apps"))|| defualtApps
