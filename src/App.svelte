@@ -21,6 +21,7 @@
 </main>
 
 <style>
+
   :global(body){
     /* background-color: #1b1b1b; */
     /* background-color: #1a1815; */

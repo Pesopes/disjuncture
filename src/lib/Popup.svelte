@@ -96,6 +96,7 @@
 
 <style>
 
+
   .centered{
     /* If it broke just add !important */
     text-align: center !important;

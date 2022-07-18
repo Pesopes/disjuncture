@@ -297,7 +297,7 @@
 
 
 <style>
-    @keyframes boop {
+  @keyframes boop {
 		0% {
 			transform: rotate(0deg);
 
@@ -324,6 +324,21 @@
 			transform: rotate(0deg);
 		}
 	}
+
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-10deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-10deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(10deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+
   .main{
     line-height: 0.4;
   }
@@ -345,7 +360,7 @@
   }
   .selected{
     --final-rotate: 18deg;
-    animation: boop infinite 0.4s;
+    animation: shake infinite 0.4s;
   }
   .used{
     color: grey;

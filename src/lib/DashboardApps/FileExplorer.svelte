@@ -9,8 +9,7 @@
 	import popSound from "./../../assets/sounds/pop.ogg"
 	import kytaravecSound from "./../../assets/sounds/kytaravec.wav"
 	import coolBeatSound from "./../../assets/sounds/cool beat.wav"
-
-
+	import Prism from "./Folders/PrismJS.svelte"
 	
   //Exports
   export let visible = false
@@ -35,24 +34,41 @@
 		name:"test",
 		files:srcObj
 	})
-	function generateSrc(){
+
+	const imageExtensions = ["svg","png","jpeg","jpg","gif"]
+	const soundExtensions = ["wav","mp3","ogg"]
+	const fileExtensionTable = {
+		svelte:"javascript",
+		js:"javascript",
+		ts:"typescript",
+		json:"json",
 	}
-	
 	//TODO: open sound file as sound, image as image ... not as text
 	let codeViewers = []
 	async function openCode(codePath){
 		// const file = await import(codePath+"?raw")
-		console.log(codePath)
-		const file = await fetch("https://raw.githubusercontent.com/Pesopes/disjuncture/master/src/"+codePath.slice(8))
-		const content = await file.text()
-		console.log(content)
+		const githubPath = "https://raw.githubusercontent.com/Pesopes/disjuncture/master/src/"+codePath
+		const file = await fetch(githubPath)
+		const content = await file.blob()
+
+		//if image open image viewer instead
+		if(imageExtensions.includes(codePath.slice(codePath.lastIndexOf('.') + 1))){
+			openImage(githubPath,codePath.slice(codePath.lastIndexOf('/') + 1))
+			return
+		}
+		//if sound open sound viewer instead
+		if(soundExtensions.includes(codePath.slice(codePath.lastIndexOf('.') + 1))){
+			openSound(githubPath,codePath.slice(codePath.lastIndexOf('/') + 1))
+			return
+		}
 		codeViewers = [...codeViewers,
 			{
-				src:file,
-				content:content,
+				src:content,
+				srcPath:githubPath,
 				type:"fileType",
 				visible:true,
-				title:codePath
+				title:codePath,
+				language:fileExtensionTable[codePath.slice(codePath.lastIndexOf('.') + 1)]
 		}]
 	}
 
@@ -182,24 +198,31 @@
 	onDestroy(unsub)
 </script>
 
+
 <Popup bind:visible bind:isPinned title="{title}">
   <Folder name="Home" files={root} expanded/>
 </Popup>
 
 {#each codeViewers as codeViewer}
-	<Popup bind:visible={codeViewer.visible} title={codeViewer.title}>
-		<div>
-			{codeViewer.content}
-		</div>
-		<a style="position: absolute;bottom: 0%;left:50%;" href="{codeViewer.source}" download>
-			<img src="{codeViewer.src}" alt="Download" width="20"/>
-		</a>
+<Popup bind:visible={codeViewer.visible} title={codeViewer.title}>
+	{#await fetch(codeViewer.srcPath)}
+		<p>Downloading file...</p>
+	{:then file}	
+		{#await file.text()}
+			<p>Loading file...</p>
+		{:then content}
+			<Prism language="{codeViewer.language}" code="{content}" header="{codeViewer.title}"/>
+				<a style="position: absolute;bottom: 0%;left:50%;" href="{window.URL.createObjectURL(codeViewer.src)}" download>
+					<img src="{DownloadImage}" alt="Download" width="20"/>
+				</a>
+		{/await}
+	{/await}
 	</Popup>
 {/each}
 
 {#each imageViewers as imageViewer}
 	<Popup bind:visible={imageViewer.visible} title={imageViewer.title}>
-		<img src="{imageViewer.source}" alt="Icon for {imageViewer.source}"/>
+		<img src="{imageViewer.source}" alt="Icon for {imageViewer.source}" style="width: 100%;height: 100%;"/>
 		<a style="position: absolute;bottom: 0%;left:50%;" href="{imageViewer.source}" download>
 			<img src="{DownloadImage}" alt="Download" width="20"/>
 		</a>

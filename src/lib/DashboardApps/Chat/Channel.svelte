@@ -3,6 +3,7 @@
   import bin from "./../../../assets/bin.svg"
   import enter from "./../../../assets/enter.svg"
   import { flip } from 'svelte/animate';
+  import { scale } from "svelte/transition";
   import { onMount } from "svelte";
 
   export let db
@@ -78,6 +79,10 @@
   let messages = []
   getMessages((mess)=>{
     messages = mess
+    console.log("NOW")
+    setTimeout(()=>{
+      scrollToBottom()
+    },200)
   })
 
   let sendPromise = null
@@ -85,7 +90,7 @@
 
 <div style="text-align: left;justify-content: left;min-width:30em;" class="chat" bind:this={chat}>
   {#each messages as {id,sentBy,sentByName,sentByIdentifier,text,sentByProfilePic} (id)}
-    <div class="message" animate:flip={{duration:200}}>
+    <div in:scale class="message" animate:flip={{duration:200}}>
       <div class="message-header">
         <img class="message-profile" width="25" src="chatProfilePictures/{sentByProfilePic}.svg" alt="profile picture number:{sentByProfilePic}">
         <abbr title="{sentBy}"><div class="message-sender">
