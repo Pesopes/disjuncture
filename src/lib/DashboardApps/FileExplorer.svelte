@@ -211,7 +211,7 @@
 		{#await file.text()}
 			<p>Loading file...</p>
 		{:then content}
-			<Prism language="{codeViewer.language}" code="{content}" header="{codeViewer.title}"/>
+			<Prism language="{codeViewer.language}" code="{content}" header="{codeViewer.title.slice(codeViewer.title.lastIndexOf('/') + 1)}"/>
 				<a style="position: absolute;bottom: 0%;left:50%;" href="{window.URL.createObjectURL(codeViewer.src)}" download>
 					<img src="{DownloadImage}" alt="Download" width="20"/>
 				</a>
