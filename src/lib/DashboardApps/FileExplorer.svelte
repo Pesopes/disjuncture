@@ -11,6 +11,8 @@
 	import coolBeatSound from "./../../assets/sounds/cool beat.wav"
 	import Prism from "./Folders/PrismJS.svelte"
 	
+	//TODO: dont import the sounds instead load them through the openCode function from github
+
   //Exports
   export let visible = false
   export let title = "New window"
