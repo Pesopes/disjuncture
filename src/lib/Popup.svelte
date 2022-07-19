@@ -161,8 +161,9 @@
     width: 10%;
     height: 25px;
     transform: scale(0.8);
-    background-color: rgb(184, 253, 175);
+    background-color: rgb(215, 224, 214);
     border-radius: 5px;
+    user-select: none;
   }
   
   .close-button{

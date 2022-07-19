@@ -6,13 +6,8 @@
   import { apps } from "./../../stores/appsStore"
 	import { onDestroy } from "svelte";
 	import DownloadImage from "./../../assets/download.svg"
-	import popSound from "./../../assets/sounds/pop.ogg"
-	import kytaravecSound from "./../../assets/sounds/kytaravec.wav"
-	import coolBeatSound from "./../../assets/sounds/cool beat.wav"
 	import Prism from "./Folders/PrismJS.svelte"
 	
-	//TODO: dont import the sounds instead load them through the openCode function from github
-
   //Exports
   export let visible = false
   export let title = "New window"
@@ -20,20 +15,22 @@
 
 
 	// console.log(import("./../Popup.svelte?raw"))
+	//assign click function to all files (uses recursion)
 	function assignFunction(objs){
 
 		if(objs!==undefined){
+			//if file assign and return
 			if(objs.files===undefined){
 				objs.clickEvent = () => openCode(objs.path)
 				return
 			}
+			//else it is a folder and loop trough its files and call this function
 			objs.files.forEach(element => {
 				assignFunction(element)
 			});
 		}
 	}
 	assignFunction({
-		name:"test",
 		files:srcObj
 	})
 
@@ -109,7 +106,6 @@
 		errorMessageVisible = true
 	}
 
-	//TODO: deno has script make dynamic folder of this source code (very meta)
 	let root = null
 	function refreshRoot(){
 			root = [
@@ -180,7 +176,7 @@
 					{
 						name: 'Sounds',
 						files: [
-							{name:"pop.ogg",clickEvent:()=>openSound(popSound,"pop.ogg")}
+							{name:"pop.ogg",clickEvent:()=>openCode("assets/sounds/pop.ogg")}
 						]
 					}
 				]
@@ -188,8 +184,8 @@
 			{
 				name:"Music",
 				files: [
-					{name:"kytaravec.wav",clickEvent:()=>openSound(kytaravecSound,"kytaravec.wav")},
-					{name:"cool beat.wav",clickEvent:()=>openSound(coolBeatSound,"cool beat.wav")},
+					{name:"kytaravec.wav",clickEvent:()=>openCode("assets/sounds/kytaravec.wav")},
+					{name:"cool beat.wav",clickEvent:()=>openCode("assets/sounds/cool beat.wav")},
 				]
 			}
 		];

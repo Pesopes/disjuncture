@@ -57,7 +57,7 @@
   let onlyNotInstalled = false
 </script>
 
-<Popup bind:visible bind:isPinned title="{title}" backgroundColor=" #F0FFFF ">
+<Popup bind:visible bind:isPinned title="{title}" backgroundColor=" #e9f2f2">
   <!-- <input type="number" bind:value="{$score}"/> -->
   <label>
     Search:
@@ -78,7 +78,7 @@
     <div style="position: static;">
 
       <div class="app-container" on:click="{()=>internalApps[app.id].dropdown=!internalApps[app.id].dropdown}">
-        <img class="app-icon" src="{app.image}" alt="icon for {app.title}"/>
+        <img class="app-icon" src="{app.image}" alt="icon for {app.title}" draggable="false"/>
         <span class="app-title">{app.title}</span>
         <div class="app-arrow" >
           <img class:upside-down={internalApps[app.id].dropdown} draggable="false" src="{DownArrow}" alt="icon for {app.title}"/>
@@ -122,7 +122,7 @@
     width: 400px;
     border: 2px solid black;
     border-radius: 20px;
-    background-color:  #A7C7E7 ;
+    background-color:  #f0f0f0 ;
     text-align: left;
     margin-top: 20px;
     scroll-behavior: smooth;
@@ -146,7 +146,8 @@
     padding-bottom: 10px;
     transform: translateY(-40px);
     margin-bottom: -40px;
-    background-color:   #87CEEB ;
+    background-color:   #3b4042 ;
+    color: white;
     /* left: -0.5%; */
     z-index: 10;
 
@@ -164,8 +165,9 @@
     left: 10px;
     height: 70%;
     padding: 5px;
-    background-color: #ffd5c8;
+    background-color: #6370aa;
     border-radius: 10px;
+    user-select: none;
   }
   .app-price{
     position: absolute;
@@ -205,9 +207,7 @@
     user-select: none;
   }
   .app-arrow>img{
-    
     height: 90%;
-
     transition: transform 0.5s;
   }
   .app-arrow:hover{

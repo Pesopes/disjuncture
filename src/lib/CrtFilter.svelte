@@ -30,7 +30,7 @@
     overflow: hidden;
   }
   .filter{
-    filter: blur(0.6px) sepia(80%);
+    filter: blur(0.6px) sepia(60%);
   }
 
 

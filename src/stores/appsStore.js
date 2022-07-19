@@ -29,6 +29,17 @@ import fileExplorerIcon from "../assets/Icons/folder.svg"
 import aboutIcon from "../assets/Icons/about.svg"
 import chatIcon from "../assets/Icons/chat.svg"
 
+const fileExplorerDesc = `
+Browse through your computer with ease. <br/>
+Who knows what you will find in there. <br/>
+Additionally comes with a built-in:
+<ul style="text-align:left;">
+  <li>Sound viewer</li>
+  <li>Image viewer</li>
+  <li>Code viewer</li>
+</ul>
+`
+
 const defualtApps= [
   {id:0,visible:false,isPinned:false,unlocked:true,cost:0,title:"Notepad",component:Notepad,image:noteIcon,description:"This is the basic note taking app.",appInfo:{selectedNote:0}},
   {id:1,visible:false,isPinned:false,unlocked:false,cost:50,title:"Calculator",component:Calculator,image:calculatorIcon,description:"A calculator app of your dreams. It can add and even multiply!"},
@@ -36,7 +47,7 @@ const defualtApps= [
   {id:3,visible:false,isPinned:false,unlocked:true,cost:0,title:"Settings",component:Settings,image:settingsIcon,description:"Customize your Luxen™ experience to your liking."},
   {id:4,visible:false,isPinned:false,unlocked:true,cost:0,title:"Store",component:Store,image:storeIcon,description:"Wait you are using this app right now aren`t you?"},
   {id:5,visible:false,isPinned:false,unlocked:false,cost:10,title:"Internet explurer",component:Internet,image:internetIcon,description:"The only good web browser available."},
-  {id:6,visible:false,isPinned:false,unlocked:false,cost:200,title:"File explurer",component:FileExplorer,image:fileExplorerIcon,description:"Browse through your computer with ease. Who knows what you will find in there.<br/>Additionally comes with a built-in image,sound and code(WIP) viewer."},
+  {id:6,visible:false,isPinned:false,unlocked:false,cost:200,title:"File explurer",component:FileExplorer,image:fileExplorerIcon,description:fileExplorerDesc},
   {id:7,visible:false,isPinned:false,unlocked:false,cost:0,title:"About",component:About,image:aboutIcon,description:"Get some information about this computer.<br/>Free of charge you just have to install it."},
   {id:8,visible:false,isPinned:false,unlocked:false,cost:10,title:"Chat",component:Chat,image:chatIcon,description:"Chat with other disjunctors!"},
 ]
