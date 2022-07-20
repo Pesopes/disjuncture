@@ -3,7 +3,7 @@
   import Chat from "./Chat/Channel.svelte"
   import { initializeApp } from "firebase/app";
   import { getFirestore ,setDoc,doc,getDoc} from "firebase/firestore";
-  import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
+  import { getAuth, signInAnonymously, onAuthStateChanged, getRedirectResult,signInWithPopup, GoogleAuthProvider, linkWithCredential} from "firebase/auth";
   //Exports
   export let visible = false
   export let title = "New window"
@@ -40,26 +40,26 @@
     }
 
     onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      uid = user.uid;
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        uid = user.uid;
 
-      console.log("SIGN IN??",uid)
-      const usersDocRef = doc(db, "users",uid);
-      const usersDocSnap = await getDoc(usersDocRef);
-      if (usersDocSnap.exists()) {
-        const userData = usersDocSnap.data()
-        displayName = userData.name
-        permanentName = userData.identifier
+        console.log("SIGN IN??",uid)
+        const usersDocRef = doc(db, "users",uid);
+        const usersDocSnap = await getDoc(usersDocRef);
+        if (usersDocSnap.exists()) {
+          const userData = usersDocSnap.data()
+          displayName = userData.name
+          permanentName = userData.identifier
+        } else {
+          permanentNameInput.disabled = false
+          console.log("No such document!");
+        }
+
       } else {
-        permanentNameInput.disabled = false
-        console.log("No such document!");
+        console.log("Signed out :(")
       }
-
-    } else {
-      console.log("Signed out :(")
-    }
     });
 
   }
@@ -100,6 +100,64 @@
 
   }
 
+  async function loginUpgrade(){
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider()
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        linkWithCredential(auth.currentUser, credential)
+          .then((usercred) => {
+            const user = usercred.user;
+            console.log("Anonymous account successfully upgraded", user);
+          }).catch((error) => {
+            console.log("Error upgrading anonymous account", error);
+          });
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        console.log(user)
+        // ...
+        onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      uid = user.uid;
+      console.log("SIGN IN??",uid)
+      const usersDocRef = doc(db, "users",uid);
+      const usersDocSnap = await getDoc(usersDocRef);
+      if (!usersDocSnap.exists()) {
+        await setDoc(doc(db, "users", uid), {
+          identifier: permanentName,
+        },{merge:true});
+      } else {
+        console.log("No such document!");
+      }
+      await setDoc(doc(db, "users", uid), {
+        name: displayName,
+      },{merge:true});
+
+      loggedIn = true
+    } else {
+      console.log("Signed out :(")
+    }
+    });
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+      
+
+  }
+  // @ts-ignore
+  window.loginUpgrading = loginUpgrade
 
 
 </script>
@@ -124,6 +182,7 @@
       {/each}
       <br>
       <button on:click="{login}">LOGIN</button>
+      <button on:click="{loginUpgrade}">UPGRADE LOGIN</button>
     {:else}
       <button on:click="{()=>loggedIn=false}">SIGN OUT</button>
       <Chat profileImage={selectedProfilePic} db={db} uid={uid}/>
