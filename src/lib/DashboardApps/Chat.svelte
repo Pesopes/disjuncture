@@ -100,6 +100,7 @@
 
   }
 
+  // I DO NOT KNOW WHAT I AM DOING :)
   async function loginUpgrade(){
     const auth = getAuth();
     const provider = new GoogleAuthProvider()

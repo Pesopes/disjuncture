@@ -12,6 +12,9 @@
 
 <svelte:head>
   <link rel="icon" href={Favicon} />
+  <meta name="description" content="A simple gui based browser game. Collect all the good numbers that satisfy the rules.">
+  <meta name="keywords" content="Severance, game">
+  <meta name="author" content="Pesopes">
 </svelte:head>
 <main>
 
