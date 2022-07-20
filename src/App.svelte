@@ -14,6 +14,7 @@
   <link rel="icon" href={Favicon} />
 </svelte:head>
 <main>
+
   <CrtFilter filterOn={$settings.crtFilter} scanlinesOn={$settings.scanLines}>
     <Board/>  
     <Dashboard/>

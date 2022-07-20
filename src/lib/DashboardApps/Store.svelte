@@ -5,8 +5,6 @@
   import DownArrow from "./../../assets/arrow-down.svg"
 	import { slide, fade } from 'svelte/transition';
 
-
-  //TODO: you can see if you installed the app before you click the dropdown and when the dropdown appears the information fades away
   export let visible = false
   export let title = "New window"
   export let isPinned = false

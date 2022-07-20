@@ -5,9 +5,14 @@
   import { mulberry32 } from "./mulberry"
   import { onMount } from "svelte";
   import { settings, score } from "../stores/localStorage"
+  import skipImg from "./../assets/skip.svg"
+  import Popup from './Popup.svelte';
+import BoardStarter from './BoardStarter.svelte';
 
   let GRID_SIZE = 18;
  
+  let boardStarterVisible = false
+
   $: rulesCount = $settings.gameSettings.rulesCount
   let board
   let numOfSolved = 0
@@ -68,6 +73,18 @@
   // FIXME: I have to create some board through init before onMount but then it warns me that I have 0 solvable
   const settingsUnsubscribe = settings.subscribe(()=>init(false))
   onDestroy(settingsUnsubscribe)
+
+  function newGame(e){
+    // console.log(e.detail)
+    $settings.gameSettings.rulesCount = e.detail.ruleCount
+    if(e.detail.seed !== 0){
+      $settings.gameSettings.seed = e.detail.seed 
+    }else{
+      $settings.gameSettings.seed = Math.floor(Math.random() * 100000)
+    }
+    boardStarterVisible=false 
+    init(false);
+  }
 
   // BUG?:because prime is so good it always chooses it
   function generateGoodGame(solveMin){
@@ -263,38 +280,43 @@
 
 
 <svelte:window on:pointerup="{handleGlobalUp}"/>
-<main >
-  <div class="main"on:pointermove="{(e)=>handleGlobalMove(e)}">
-    <p class="tcenter" style="font-size: 1rem;" on:click="{debugPrintRules}">Rules:{rulesCount}</p>
-    <p class="tcenter">{solvedPercent}% complete; score: {$score}</p>
-    
-    <div class="center">
-      <div  bind:this="{boardDiv}">
-        {#each board as row, i}
-        <div class="row">
-            {#each row as cell, k}
-            <div class:selected={cell.selected}
-                on:pointerdown="{(e)=>handleDown(i,k,e)}"
-                on:pointerover="{(e)=>handleOver(i,k,e)}"
-                on:pointerup="{(e)=>handleUp(i,k,e)}"               
-                on:gotpointercapture="{handleGotPointerCapture}"
-                >
-              <div
-                class="square empty"
-                class:used={cell.used}
-                style="transform-origin:top center;transform:scale({cell.scale});filter:drop-shadow({cell.dropshadow};"
-                >
-                {cell.text}
-              </div>
+
+<div class="main"on:pointermove="{(e)=>handleGlobalMove(e)}">
+  <p class="tcenter" style="font-size: 1rem;" on:click="{debugPrintRules}">Rules:{rulesCount}</p>
+  <p class="tcenter">{solvedPercent}% complete; score: {$score}</p>
+  <div class="tcenter" >
+    <img src="{skipImg}" alt="New Board" on:click="{()=>boardStarterVisible=true}">
+  </div>
+
+  <div class="center">
+    <div  bind:this="{boardDiv}">
+      {#each board as row, i}
+      <div class="row">
+          {#each row as cell, k}
+          <div class:selected={cell.selected}
+              on:pointerdown="{(e)=>handleDown(i,k,e)}"
+              on:pointerover="{(e)=>handleOver(i,k,e)}"
+              on:pointerup="{(e)=>handleUp(i,k,e)}"               
+              on:gotpointercapture="{handleGotPointerCapture}"
+              >
+            <div
+              class="square empty"
+              class:used={cell.used}
+              style="transform-origin:top center;transform:scale({cell.scale});filter:drop-shadow({cell.dropshadow};"
+              >
+              {cell.text}
             </div>
-            {/each}
           </div>
-        {/each}
-      </div>
+          {/each}
+        </div>
+      {/each}
     </div>
   </div>
-</main>
+</div>
 
+<Popup bind:visible={boardStarterVisible} title="New board" pinnable="{false}" centered>
+  <BoardStarter on:newGame={newGame}></BoardStarter>
+</Popup>
 
 <style>
   @keyframes boop {
@@ -341,6 +363,7 @@
 
   .main{
     line-height: 0.4;
+    height: 95%;
   }
   .square {
     pointer-events: none;

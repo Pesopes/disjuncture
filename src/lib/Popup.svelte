@@ -67,7 +67,7 @@
 <svelte:window on:keydown={handle_keydown} on:pointerup="{handleGlobalUp}" on:pointermove="{handleGlobalMove}"/>
 {#if visible}
 <main >
-  <!-- Backgound -->
+  <!-- Background -->
   <!-- class:on-top={!isPinned} This was on background but there are some weird overlapping issues -->
   <div class:background={!isPinned}  transition:fade={{duration:200}} on:pointerdown={(e)=>{
     if(e.target !== e.currentTarget) return; //only on parent not children
@@ -139,6 +139,8 @@
     color: #1a1a1a;
     pointer-events: auto; /*for some reason I need this*/
     box-shadow: 0.5px 0.5px 0 0.5px black, inset 1px 1px white,inset -1px -1px #85898d;
+    border-radius: 1%;
+
     max-width: 70%;
     max-height: 70%;
     min-width: 18%;
@@ -173,6 +175,7 @@
     width: 10%;
     height: 25px;
     background-color: rgb(158, 18, 18);
+    overflow: hidden;
   }
   .pin-button:hover,.pin-button:focus,.close-button:focus,.close-button:hover {
     cursor: pointer;
@@ -194,7 +197,7 @@
   }
   .popup{
     overflow: auto;
-    padding: 40px 50px 10px; /*top,sides,bottom*/
+    padding: 25px 15px 10px; /*top,sides,bottom*/
 
   }
   div :global(button) {

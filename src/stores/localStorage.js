@@ -31,12 +31,16 @@ notes.subscribe(value => {
     localStorage.setItem("notes", JSON.stringify(value));
 });
 
+
 // Score
 const storedScore = JSON.parse(localStorage.getItem("score")) || 0
 export const score = writable(storedScore);
 score.subscribe(value => {
-    localStorage.setItem("score", JSON.stringify(value));
+  localStorage.setItem("score", JSON.stringify(value));
 });
+//DEBUG: remove for obvious reasons
+// @ts-ignore
+window.hackScore = (num)=> score.set(num) 
 
 // Settings
 export const settingsDefault = {
