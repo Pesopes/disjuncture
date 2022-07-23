@@ -126,7 +126,6 @@
     display: flex;
     flex-direction: column;
 
-
     top: 50%;
     right: 50%;
     transform: translate(50%,-50%);
@@ -141,8 +140,8 @@
     box-shadow: 0.5px 0.5px 0 0.5px black, inset 1px 1px white,inset -1px -1px #85898d;
     border-radius: 1%;
 
-    max-width: 70%;
-    max-height: 70%;
+    max-width: 90%;
+    max-height: 90%;
     min-width: 18%;
     min-height: 25%;
   }
@@ -209,20 +208,21 @@
     font-weight: 700;
     padding: 0.3rem 0.6rem;
     cursor: pointer;
-    border: 3px solid;
-    border-image:  linear-gradient(to bottom right,white 0% 50%,black 50% 100%) 1;
-    background-color: rgb(143, 142, 142);
+    /* border: 3px solid; */
+    /* border-image:  linear-gradient(to bottom right,white 0% 50%,black 50% 100%) 1; */
+    border-width: 6px;
+    --top-border-color:rgb(187, 187, 187);
+    --bottom-border-color:rgb(58, 56, 56);
+    border-color: var(--top-border-color) var(--bottom-border-color) var(--bottom-border-color) var(--top-border-color);
+    background-color: rgb(126, 126, 126);
     text-align: center;
   }
   div :global(button:active:not([disabled])) {
-
-    border-image:  linear-gradient(to bottom right,black 0% 50%,white 50% 100%) 1;
-
+    border-color: var(--bottom-border-color) var(--top-border-color) var(--top-border-color) var(--bottom-border-color);
     filter: brightness(0.8);
-  }
+  } 
+  
   /* Disable the arrows */
-
-
   div :global(input[type=number]) {
     background-color: var(--popup-background);
     border: 2px solid;

@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-const version = 2
+const version = 3
 
 const currVersion = parseInt(localStorage.getItem("version")) || null
 if(currVersion===null){
@@ -38,6 +38,14 @@ export const score = writable(storedScore);
 score.subscribe(value => {
   localStorage.setItem("score", JSON.stringify(value));
 });
+
+// Used seeds
+const storedUsedSeeds = JSON.parse(localStorage.getItem("usedSeeds")) || []
+export const usedSeeds = writable(storedUsedSeeds);
+usedSeeds.subscribe(value => {
+  localStorage.setItem("usedSeeds", JSON.stringify(value));
+});
+
 //DEBUG: remove for obvious reasons
 // @ts-ignore
 window.hackScore = (num)=> score.set(num) 

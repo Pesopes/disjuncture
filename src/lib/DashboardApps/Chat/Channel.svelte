@@ -125,7 +125,7 @@
 
 <style>
   .chat{
-    overflow: auto;
+    overflow-y: auto;
     height: 20em;
     max-height: 20em;
     scroll-behavior: smooth;
