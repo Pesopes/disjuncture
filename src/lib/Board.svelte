@@ -286,7 +286,7 @@
 <div class="main"on:pointermove="{(e)=>handleGlobalMove(e)}">
   <p class="tcenter" style="font-size: 1rem;" on:click="{debugPrintRules}">Rules:{rulesCount}</p>
   <p class="tcenter">{solvedPercent}% complete; score: {$score}</p>
-  <div class="tcenter" >
+  <div class="tcenter" style="cursor: pointer;" >
     <img src="{skipImg}" alt="New Board" on:click="{()=>boardStarterVisible=true}">
   </div>
 
