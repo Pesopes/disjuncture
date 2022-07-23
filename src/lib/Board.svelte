@@ -4,10 +4,10 @@
   import { getRuleFunctions } from "./Rules"
   import { mulberry32 } from "./mulberry"
   import { onMount } from "svelte";
-  import { settings, score } from "../stores/localStorage"
+  import { settings, score, usedSeeds } from "../stores/localStorage"
   import skipImg from "./../assets/skip.svg"
   import Popup from './Popup.svelte';
-import BoardStarter from './BoardStarter.svelte';
+  import BoardStarter from './BoardStarter.svelte';
 
   let GRID_SIZE = 18;
  
@@ -186,7 +186,9 @@ import BoardStarter from './BoardStarter.svelte';
         }
       })
       //give points and count solved
-      score.set($score+notUsed * notUsed)
+      if(!$usedSeeds.includes($settings.gameSettings.seed)){
+        score.set($score+notUsed * notUsed)
+      }
       numOfSolved += notUsed
     }
     
@@ -293,18 +295,18 @@ import BoardStarter from './BoardStarter.svelte';
       {#each board as row, i}
       <div class="row">
           {#each row as cell, k}
-          <div class:selected={cell.selected}
-              on:pointerdown="{(e)=>handleDown(i,k,e)}"
-              on:pointerover="{(e)=>handleOver(i,k,e)}"
-              on:pointerup="{(e)=>handleUp(i,k,e)}"               
-              on:gotpointercapture="{handleGotPointerCapture}"
-              >
-            <div
-              class="square empty"
-              class:used={cell.used}
-              style="transform-origin:top center;transform:scale({cell.scale});filter:drop-shadow({cell.dropshadow};"
-              >
-              {cell.text}
+          <div class:dark={cell.selected}>
+            <div class:selected={cell.selected}
+                on:pointerdown="{(e)=>handleDown(i,k,e)}"
+                on:pointerover="{(e)=>handleOver(i,k,e)}"
+                on:pointerup="{(e)=>handleUp(i,k,e)}"               
+                on:gotpointercapture="{handleGotPointerCapture}"
+                >
+              <div
+                class="square empty"
+                class:used={cell.used}
+                style="transform-origin:top center;transform:scale({cell.scale});filter:drop-shadow({cell.dropshadow};"
+                >{cell.text}</div>
             </div>
           </div>
           {/each}
@@ -322,7 +324,6 @@ import BoardStarter from './BoardStarter.svelte';
   @keyframes boop {
 		0% {
 			transform: rotate(0deg);
-
 		}
 		20% {
 			transform: rotate(calc(var(--final-rotate)*-1));
@@ -385,12 +386,17 @@ import BoardStarter from './BoardStarter.svelte';
     --final-rotate: 18deg;
     animation: shake infinite 0.4s;
   }
+  .dark{
+    filter: brightness(0.5);
+  }
   .used{
     color: grey;
     transition: color 0.2s;
   }
   .row {
     display: flex;
+
+
   }
   .center {
     display: flex;
