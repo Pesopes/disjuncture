@@ -34,23 +34,23 @@ Additionally comes with a built-in:
 </ul>
 `
 
-const defualtApps= [
-  {id:0,visible:false,isPinned:false,unlocked:true,cost:0,title:"Notepad",component:Notepad,image:noteIcon,description:"This is the basic note taking app.",appInfo:{selectedNote:0}},
-  {id:1,visible:false,isPinned:false,unlocked:false,cost:50,title:"Calculator",component:Calculator,image:calculatorIcon,description:"A calculator app of your dreams. It can add and even multiply!"},
-  {id:2,visible:false,isPinned:false,unlocked:false,cost:100,title:"Paint",component:Paint,image:paintIcon,description:"Embrace your inner artist with this paint program. Up to 4 breathtaking colours will make your dreams come to life."},
-  {id:3,visible:false,isPinned:false,unlocked:true,cost:0,title:"Settings",component:Settings,image:settingsIcon,description:"Customize your Luxen™ experience to your liking."},
-  {id:4,visible:false,isPinned:false,unlocked:true,cost:0,title:"Store",component:Store,image:storeIcon,description:"Wait you are using this app right now aren't you?"},
-  {id:5,visible:false,isPinned:false,unlocked:false,cost:10,title:"Internet explurer",component:Internet,image:internetIcon,description:"The only good web browser available."},
-  {id:6,visible:false,isPinned:false,unlocked:false,cost:200,title:"File explurer",component:FileExplorer,image:fileExplorerIcon,description:fileExplorerDesc},
-  {id:7,visible:false,isPinned:false,unlocked:false,cost:0,title:"About",component:About,image:aboutIcon,description:"Get some information about this computer.<br/>Free of charge you just have to install it."},
-  {id:8,visible:false,isPinned:false,unlocked:false,cost:10,title:"Chat",component:Chat,image:chatIcon,description:"Chat with other disjunctors!"},
-  {id:9,visible:false,isPinned:false,unlocked:false,cost:9999,title:"Verge",component:Verge,image:vergeIcon,description:"Luxen™ is introducing the browser made for the future. Based on silverium it's up to ∞ times faster than Internet explurer."},
-  {id:10,visible:false,isPinned:false,unlocked:false,cost:175,title:"Calendar",component:Calendar,image:calendarIcon,description:"Keep track of time with this awesome calendar app."},
+const defualtApps = [
+  { id: 0, visible: false, isPinned: false, unlocked: true, cost: 0, title: "Notepad", component: Notepad, image: noteIcon, description: "This is the basic note taking app.", appInfo: { selectedNote: 0 } },
+  { id: 1, visible: false, isPinned: false, unlocked: false, cost: 50, title: "Calculator", component: Calculator, image: calculatorIcon, description: "A calculator app of your dreams. It can add and even multiply!" },
+  { id: 2, visible: false, isPinned: false, unlocked: false, cost: 100, title: "Paint", component: Paint, image: paintIcon, description: "Embrace your inner artist with this paint program. Up to 4 breathtaking colours will make your dreams come to life." },
+  { id: 3, visible: false, isPinned: false, unlocked: true, cost: 0, title: "Settings", component: Settings, image: settingsIcon, description: "Customize your Luxen™ experience to your liking." },
+  { id: 4, visible: false, isPinned: false, unlocked: true, cost: 0, title: "Store", component: Store, image: storeIcon, description: "Wait you are using this app right now aren't you?" },
+  { id: 5, visible: false, isPinned: false, unlocked: false, cost: 10, title: "Internet explurer", component: Internet, image: internetIcon, description: "The only good web browser available." },
+  { id: 6, visible: false, isPinned: false, unlocked: false, cost: 200, title: "File explurer", component: FileExplorer, image: fileExplorerIcon, description: fileExplorerDesc },
+  { id: 7, visible: false, isPinned: false, unlocked: false, cost: 0, title: "About", component: About, image: aboutIcon, description: "Get some information about this computer.<br/>Free of charge you just have to install it." },
+  // { id: 8, visible: false, isPinned: false, unlocked: false, cost: 10, title: "Chat", component: Chat, image: chatIcon, description: "Chat with other disjunctors!" },
+  { id: 8, visible: false, isPinned: false, unlocked: false, cost: 9999, title: "Verge", component: Verge, image: vergeIcon, description: "Luxen™ is introducing the browser made for the future. Based on silverium it's up to ∞ times faster than Internet explurer." },
+  { id: 9, visible: false, isPinned: false, unlocked: false, cost: 175, title: "Calendar", component: Calendar, image: calendarIcon, description: "Keep track of time with this awesome calendar app." },
 ]
 
-export const storedApps = JSON.parse(localStorage.getItem("apps"))|| defualtApps
+export const storedApps = JSON.parse(localStorage.getItem("apps")) || defualtApps
 
-export const apps = writable(storedApps.map((el,_)=>{return {...defualtApps[_],...el}}))
+export const apps = writable(storedApps.map((el, _) => { return { ...defualtApps[_], ...el } }))
 
 apps.subscribe(value => {
   localStorage.setItem("apps", JSON.stringify(value));
