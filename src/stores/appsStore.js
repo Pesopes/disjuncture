@@ -7,7 +7,6 @@ import Store from "./../lib/DashboardApps/Store.svelte"
 import Internet from "./../lib/DashboardApps/Internet.svelte"
 import FileExplorer from "./../lib/DashboardApps/FileExplorer.svelte"
 import About from "./../lib/DashboardApps/About.svelte"
-import Chat from "./../lib/DashboardApps/Chat.svelte"
 import Verge from "./../lib/DashboardApps/Verge.svelte"
 import Calendar from "./../lib/DashboardApps/Calendar.svelte"
 
