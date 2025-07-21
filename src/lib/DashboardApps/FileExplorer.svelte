@@ -50,24 +50,24 @@
 	let codeViewers = []
 	async function openCode(codePath){
 		// const file = await import(codePath+"?raw")
-		const githubPath = basePath + "/" + "https://raw.githubusercontent.com/Pesopes/disjuncture/master/src/" + codePath;
+		const githubPath = "https://raw.githubusercontent.com/Pesopes/disjuncture/master/src/" + codePath;
 		const file = await fetch(githubPath)
 		const content = await file.blob()
 
 		//if image open image viewer instead
 		if(imageExtensions.includes(codePath.slice(codePath.lastIndexOf('.') + 1))){
-			openImage(basePath + "/" + githubPath,codePath.slice(codePath.lastIndexOf('/') + 1))
+			openImage(githubPath,codePath.slice(codePath.lastIndexOf('/') + 1))
 			return
 		}
 		//if sound open sound viewer instead
 		if(soundExtensions.includes(codePath.slice(codePath.lastIndexOf('.') + 1))){
-			openSound(basePath + "/" + githubPath,codePath.slice(codePath.lastIndexOf('/') + 1))
+			openSound(githubPath,codePath.slice(codePath.lastIndexOf('/') + 1))
 			return
 		}
 		codeViewers = [...codeViewers,
 			{
 				src:content,
-				srcPath:basePath + "/" + githubPath,
+				srcPath:githubPath,
 				type:"fileType",
 				visible:true,
 				title:codePath,
