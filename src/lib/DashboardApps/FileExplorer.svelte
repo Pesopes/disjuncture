@@ -13,10 +13,6 @@
   export let title = "New window"
   export let isPinned = false
 
-  // Set this to your deployment subdirectory, or leave as '' for root
-// @ts-ignore
-  const basePath = window.__BASE_PATH__ || '';
-
 
 	// console.log(import("./../Popup.svelte?raw"))
 	//assign click function to all files (uses recursion)
@@ -50,7 +46,7 @@
 	let codeViewers = []
 	async function openCode(codePath){
 		// const file = await import(codePath+"?raw")
-		const githubPath = "https://raw.githubusercontent.com/Pesopes/disjuncture/master/src/" + codePath;
+		const githubPath = "https://raw.githubusercontent.com/Pesopes/disjuncture/master/" + codePath;
 		const file = await fetch(githubPath)
 		const content = await file.blob()
 
@@ -89,7 +85,7 @@
 	function openImage(imageSrc,imageName){
 		imageViewers = [...imageViewers,
 			{
-				source:basePath + "/" + imageSrc,
+				source:imageSrc,
 				title:imageName,
 				visible:true
 		}]
@@ -99,7 +95,7 @@
 	function openSound(soundSrc,soundName){
 		soundViewers = [...soundViewers,
 			{
-				source:basePath + "/" + soundSrc,
+				source:soundSrc,
 				title:soundName,
 				visible:true
 		}]
