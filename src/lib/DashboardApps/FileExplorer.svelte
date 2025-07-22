@@ -245,12 +245,12 @@
 					{
 						name: "kytaravec.wav",
 						clickEvent: () =>
-							openCode("assets/sounds/kytaravec.wav"),
+							openCode("src/assets/sounds/kytaravec.wav"),
 					},
 					{
 						name: "cool beat.wav",
 						clickEvent: () =>
-							openCode("assets/sounds/cool beat.wav"),
+							openCode("src/assets/sounds/cool beat.wav"),
 					},
 				],
 			},
