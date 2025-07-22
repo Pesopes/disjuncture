@@ -6,7 +6,7 @@
 	export let path = "kul"
 	path = "bruh"//this is so svelte doesn't yell at me :)
 	let type = name.slice(name.lastIndexOf('.') + 1);
-	let src = `/icons/${type}.svg`
+	let src = `./icons/${type}.svg`
 
 	let style = clickEvent === null ? "" : "cursor:pointer;"
 </script>
